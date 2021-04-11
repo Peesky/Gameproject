@@ -40,7 +40,7 @@ def main():
         player.update()
         
         draw(sprites)
-        print(player.e)
+        print(player.argent)
         pygame.display.flip()
         player.move()
         for event in pygame.event.get():

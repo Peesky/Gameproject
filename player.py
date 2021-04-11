@@ -53,19 +53,29 @@ class Player:
                     self.argent-=100
                     self.th1=threading.Thread(self.add(shooter(self.mousePos),self.Bz))
                     self.th1.start()
+                    self.z=False
                     
     def addtrooper(self):
         if self.e:
             if self.mouseSTATE[0]:
-                sprites.append(barracks(self.mousePos))
                 self.argent-=150
+                if self.Be == False:
+                    self.argent-=100
+                    self.th1=threading.Thread(self.add(barracks(self.mousePos),self.Be))
+                    self.th1.start()
+                    self.e=False
+                
                 
 
     def addrecolteur(self):
         if self.a:
             if self.mouseSTATE[0]:
-                sprites.append(recolteur(self.mousePos))
                 self.argent-=300
+                if self.Ba == False:
+                    self.th1=threading.Thread(self.add(recolteur(self.mousePos),self.Ba))
+                    self.th1.start()
+                    self.a=False
+                
 
     
 
@@ -80,15 +90,15 @@ class Player:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
-            if self.argent>300:
-                self.addrecolteur()
+            if self.argent>=300 and not self.z and not self.e:
+                self.a=True
 
-        if keys[pygame.K_z]:
+        if keys[pygame.K_z] and not self.a and not self.e:
             if self.argent>=100:
                 self.z=True
 
-        if keys[pygame.K_e]:
-            if self.argent>150:
+        if keys[pygame.K_e] and not self.z and not self.a:
+            if self.argent>=150:
                 self.e=True
 
         if keys[pygame.K_r]:
