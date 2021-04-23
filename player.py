@@ -2,15 +2,19 @@ import pygame
 from build import *
 import threading
 import time
-
-#CONST
-sprites=[]
+from client import *
 
 
 
 class Player:
     def __init__(self,):
+        
+
+
+        self.id=0
         self.argent=500
+        self.sprites=[]
+        self.builds=[]
         
         self.mousePos=pygame.mouse.get_pos()
         self.mouseSTATE=pygame.mouse.get_pressed()
@@ -32,15 +36,9 @@ class Player:
         
     def add(self,build, var):
         var=True
-        sprites.append(build)
+        self.builds.append(build)
         time.sleep(0.3)
         var=False
-
-
-
-
-
-
 
 
     def menu(self):
@@ -62,11 +60,10 @@ class Player:
                 if self.Be == False:
                     self.argent-=100
                     self.th1=threading.Thread(self.add(barracks(self.mousePos),self.Be))
+                    print("ok")
                     self.th1.start()
                     self.e=False
                 
-                
-
     def addrecolteur(self):
         if self.a:
             if self.mouseSTATE[0]:
