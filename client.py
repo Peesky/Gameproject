@@ -1,6 +1,7 @@
 import socket
 import pickle
 import time
+import threading
 
 def startclient(msg,cible):
     HEADERSIZE = 10
@@ -8,6 +9,13 @@ def startclient(msg,cible):
     s.connect(("127.0.0.1", 1243))
     listerecue=[]
     while True:
+        message = msg
+        message = pickle.dumps(message)
+        message = bytes(f"{len(msg):<{HEADERSIZE}}", 'utf-8')+message
+        s.send(message)
+        print(f"message: {message}")
+        time.sleep(0.002)
+        
         full_msg=b""
         new_message=True
         mesg_complet =False

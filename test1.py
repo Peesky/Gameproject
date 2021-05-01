@@ -2,7 +2,7 @@ import socket
 import pickle
 import time
 
-def startclient():
+def client():
     HEADERSIZE = 10
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect(("127.0.0.1", 1243))
@@ -35,6 +35,5 @@ def startclient():
         msg = bytes(f"{len(msg):<{HEADERSIZE}}", 'utf-8')+msg
         print(msg)
         s.send(msg)
-        time.sleep(3)
+client()
 
-startclient()

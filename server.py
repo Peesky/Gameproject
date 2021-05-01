@@ -10,10 +10,12 @@ import threading
 def client(clientsocket,stock,msg):
     HEADERSIZE = 10
     while True:
-        d = msg
-        msg = pickle.dumps(d)
-        msg = bytes(f"{len(msg):<{HEADERSIZE}}", 'utf-8')+msg
-        clientsocket.send(msg)
+        print(f"stock, msg : {stock, msg}")
+        message = msg
+        if len(msg)>0:
+            message = pickle.dumps(message)
+            message = bytes(f"{len(msg):<{HEADERSIZE}}", 'utf-8')+message
+            clientsocket.send(message)
         time.sleep(0.002)
 
         full_msg=b""
@@ -23,6 +25,7 @@ def client(clientsocket,stock,msg):
 
         while not mesg_complet:
             msg = clientsocket.recv(32)
+            print(f"message recu : {msg}")
             if new_message:
                 msglen = int(msg[:HEADERSIZE])
                 new_message = False
@@ -32,8 +35,9 @@ def client(clientsocket,stock,msg):
             if len(full_msg)-HEADERSIZE == msglen:
                 full_msg = full_msg[HEADERSIZE:]
                 full_msg =  pickle.loads(full_msg)
-
+                print(f"full msg recu decrypte{full_msg}")
                 stock=full_msg
+                print("oki")
                 mesg_complet = True
                 new_message = True
                 full_msg = b""
@@ -43,6 +47,10 @@ def tuplestock(nbp,stock,stock1):
         return [stock1,stock]
     else:
         return [ stock,stock1]
+
+def printstock(b,a):
+    while True:
+        print(f"stock a,b : {a,b}")
 
 def start():
     HEADERSIZE = 10
@@ -54,6 +62,8 @@ def start():
     stock1=[]
 
     threads = []
+    thr=threading.Thread(target=printstock, args = (stock1,stock))
+    #thr.start()
 
     while True:
         print("en ecoute")
@@ -63,6 +73,7 @@ def start():
         thread.start()
         threads.append(thread)
         numplayer+=1
+        
             
 
 start()  

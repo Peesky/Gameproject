@@ -44,6 +44,7 @@ for i in range(5):
 
 
 
+
 def main():
     run = True
     otherbuilds=[]
@@ -60,6 +61,7 @@ def main():
         win.fill(backC)
         
         equivalent(player.builds, player.sprites)
+        
         equivalent(otherbuilds, othersprites)
         
 
@@ -67,6 +69,7 @@ def main():
 
         player.update()
         draw(player.sprites)
+        draw(othersprites)
         #draw(sprites1)
         
 
