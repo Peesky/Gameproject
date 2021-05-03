@@ -16,7 +16,8 @@ def client(clientsocket, msg, ):
     HEADERSIZE = 10
     def envoyer():
         while True:
-            d = msg
+            global message
+            d = message
             d = pickle.dumps(d)
             d = bytes(f"{len(d):<{HEADERSIZE}}", 'utf-8')+d
             clientsocket.send(d)
@@ -72,8 +73,8 @@ def clientext(msg,):
     s.connect(("127.0.0.1", 1243))
     def envoyer():
         while True:
-            
-            d = msg
+            global message1
+            d = message1
             d = pickle.dumps(d)
             d = bytes(f"{len(d):<{HEADERSIZE}}", 'utf-8')+d
             s.send(d)
@@ -133,4 +134,4 @@ def verify():
 thr3= threading.Thread(target=verify)
 thr3.start()
 
-message1 = ["2222","2222","1111"]
+

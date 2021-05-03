@@ -2,24 +2,26 @@ import pygame
 from build import *
 import threading
 import time
-from client import *
+import socket
+import pickle
 
 
 
 class Player:
-    def __init__(self,):
-        
-
-
+    def __init__(self,):      
         self.id=0
         self.argent=500
         self.sprites=[]
         self.builds=[]
         
+        self.rect=pygame.Rect(0,360,1366,360)
+        self.otherrect=pygame.Rect(0,0,1366,360)
+
+        self.otherbuilds=[]
+        self.othersprites=[]
+        
         self.mousePos=pygame.mouse.get_pos()
         self.mouseSTATE=pygame.mouse.get_pressed()
-
-        self.menu=False
 
         self.a=False
         self.z=False
@@ -34,6 +36,8 @@ class Player:
         self.th2=threading.Thread(target=None)
         self.th3=threading.Thread(target=None)
         
+        
+        
     def add(self,build, var):
         var=True
         self.builds.append(build)
@@ -42,7 +46,13 @@ class Player:
 
 
     def menu(self):
-        pass
+        i=input("host?")
+        if i=="y":
+            self.thr= threading.Thread(self.start())
+            self.thr.start()
+        else:
+            self.thr= threading.Thread(self.clientext())
+            self.thr.start()
 
     def addshooter(self):
         if self.z:
@@ -100,8 +110,8 @@ class Player:
 
         if keys[pygame.K_r]:
             self.menu()
-            
-    
-    
 
-        
+
+
+
+           

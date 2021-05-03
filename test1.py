@@ -35,5 +35,7 @@ def client():
         msg = bytes(f"{len(msg):<{HEADERSIZE}}", 'utf-8')+msg
         print(msg)
         s.send(msg)
-client()
+
+def lol(self):
+    
 
