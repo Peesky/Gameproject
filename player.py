@@ -15,6 +15,7 @@ class Player:
         self.builds=[]
         
         self.rect=pygame.Rect(0,360,1366,360)
+        self.reccoo=[0,1366,360,720]
         self.otherrect=pygame.Rect(0,0,1366,360)
 
         self.otherbuilds=[]
@@ -36,13 +37,18 @@ class Player:
         self.th2=threading.Thread(target=None)
         self.th3=threading.Thread(target=None)
         
-        
+    def verifyMousePos(self,mousePos):
+        if self.reccoo[0]<self.mousePos[0]<self.reccoo[1] and self.reccoo[2]<self.mousePos[1]<self.reccoo[3] :
+            return True    
+        else:
+            return False
+
         
     def add(self,build, var):
-        var=True
+        #var=True
         self.builds.append(build)
         time.sleep(0.3)
-        var=False
+        #var=False
 
 
     def menu(self):
@@ -57,31 +63,37 @@ class Player:
     def addshooter(self):
         if self.z:
             if self.mouseSTATE[0]:
-                if self.Bz == False:
-                    self.argent-=100
-                    self.th1=threading.Thread(self.add(shooter(self.mousePos),self.Bz))
-                    self.th1.start()
-                    self.z=False
+                Mp=self.verifyMousePos(self.mousePos)
+                if Mp:
+                    if self.Bz == False:
+                        self.argent-=100
+                        self.th1=threading.Thread(self.add(shooter(self.mousePos,self.builds),self.Bz))
+                        self.th1.start()
+                        self.z=False
                     
     def addtrooper(self):
         if self.e:
             if self.mouseSTATE[0]:
-                self.argent-=150
-                if self.Be == False:
-                    self.argent-=100
-                    self.th1=threading.Thread(self.add(barracks(self.mousePos),self.Be))
-                    print("ok")
-                    self.th1.start()
-                    self.e=False
+                Mp=self.verifyMousePos(self.mousePos)
+                if Mp:
+                    if self.Be == False:
+                        self.argent-=150
+                        self.th1=threading.Thread(self.add(barracks(self.mousePos),self.Be))
+                        print("ok")
+                        self.th1.start()
+                        self.e=False
+                
                 
     def addrecolteur(self):
         if self.a:
             if self.mouseSTATE[0]:
-                self.argent-=300
-                if self.Ba == False:
-                    self.th1=threading.Thread(self.add(recolteur(self.mousePos),self.Ba))
-                    self.th1.start()
-                    self.a=False
+                Mp=self.verifyMousePos(self.mousePos)
+                if Mp:
+                    if self.Ba == False:
+                        self.argent-=300
+                        self.th1=threading.Thread(self.add(recolteur(self.mousePos),self.Ba))
+                        self.th1.start()
+                        self.a=False
                 
 
     
@@ -112,6 +124,10 @@ class Player:
             self.menu()
 
 
+    def buildlife(self):
+        for i in len(self.builds):
+            if self.builds[i].life<=0:
+                del  self.builds[i]
 
 
            

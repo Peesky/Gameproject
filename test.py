@@ -1,137 +1,53 @@
-import socket
-import time
-import pickle
-import threading
+import pygame
 
-message = ["1111","111111","11111111"]
+pygame.init()
 
-stock = []
+width = 500
+height = 500
+pygame.display.set_caption("MRTS")
+win=pygame.display.set_mode((width,height), pygame.RESIZABLE)
+backC=pygame.color.Color("#FFFFFF")
 
-message1 = ["2222","2222","1111"]
-
-stock1 = []
-
-
-def client(clientsocket, msg, ):
-    HEADERSIZE = 10
-    def envoyer():
-        while True:
-            global message
-            d = message
-            d = pickle.dumps(d)
-            d = bytes(f"{len(d):<{HEADERSIZE}}", 'utf-8')+d
-            clientsocket.send(d)
-            time.sleep(1)
-    def recevoir():
-        while True:            
-            full_msg=b""
-            new_message=True
-            mesg_complet =False
-
-            while not mesg_complet:
-                recu = clientsocket.recv(32)
-                if new_message:
-                    msglen = int(recu[:HEADERSIZE])
-                    new_message = False
-                
-                full_msg+=recu
-                
-                if len(full_msg)-HEADERSIZE == msglen:
-                    full_msg = full_msg[HEADERSIZE:]
-                    full_msg=pickle.loads(full_msg)
-                    global stock
-                    stock = full_msg
-                    mesg_complet = True
-                    new_message = True
-                    full_msg = b""
-                
-                if len(full_msg)-HEADERSIZE > msglen:
-                    full_msg = b""
-                    new_message = True
-    th1=threading.Thread(target=envoyer)
-    th1.start()
-    th2= threading.Thread(target=recevoir)
-    th2.start()
-
-def start(msg):
-    HEADERSIZE = 10
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind(("127.0.0.1", 1243))
-    s.listen(2)
+class poy:
+    def __init__(self):
+        self.rect=pygame.Rect(0,0,1366,360)
+        self.reccoo=[0,1366,0,360]
+        self.mousePos=pygame.mouse.get_pos()
     
-    while True:
-        print("en ecoute")
-        clientsocket, address = s.accept()
-        print(f"Connection from {address} has been established.")
-        thread = threading.Thread(target=client, args=(clientsocket,msg))
-        thread.start()
-        
+    def update(self):
+        self.mousePos=pygame.mouse.get_pos()
 
-def clientext(msg,):
-    HEADERSIZE = 10
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(("127.0.0.1", 1243))
-    def envoyer():
-        while True:
-            global message1
-            d = message1
-            d = pickle.dumps(d)
-            d = bytes(f"{len(d):<{HEADERSIZE}}", 'utf-8')+d
-            s.send(d)
-            time.sleep(1)
-    def recevoir():
-        while True:
-            full_msg=b""
-            new_message=True
-            mesg_complet =False
-
-            while not mesg_complet:
-                msg = s.recv(32)
-                if new_message:
-                    msglen = int(msg[:HEADERSIZE])
-                    new_message = False
-                
-                full_msg+=msg
-                
-                if len(full_msg)-HEADERSIZE == msglen:
-                    full_msg = full_msg[HEADERSIZE:]
-                    global stock1
-                    stock1 = pickle.loads(full_msg)
-                    mesg_complet = True
-                    new_message = True
-                    full_msg = b""
-                    
-                
-                if len(full_msg)-HEADERSIZE > msglen:
-                    full_msg = b""
-                    new_message = True
-
-    th1=threading.Thread(target=envoyer)
-    th1.start()
-    th2= threading.Thread(target=recevoir)
-    th2.start()       
-        
-
-thr= threading.Thread(target=start, args=(message,))
-thr.start()
-thr2= threading.Thread(target=clientext, args=(message1,))
-thr2.start()
-
-def verify():
-    global message,message1,stock,stock1
-    while True:
-        """if m1==c2:
-            print("ok")
+    def verify(self):
+        if self.reccoo[0]<self.mousePos[0]<self.reccoo[1] and self.reccoo[2]<self.mousePos[1]<self.reccoo[3] :
+            print("youhooo")
         else:
-            print("non")
-        if m2==c1:
-            print("ok2")
-        else:
-            print("non")"""
-        time.sleep(3)
-        print(message,message1,stock,stock1)
+            print("nooooo")
+            print(self.mousePos)
+            print(self.reccoo)
 
-thr3= threading.Thread(target=verify)
-thr3.start()
+player=poy()
+def main():
+    
+    run = True
 
-
+    clock = pygame.time.Clock()
+    red=(255,0,0)
+    blue=(0,0,255)
+    while run:
+        clock.tick(60)
+        win.fill(backC)
+        pygame.draw.rect(win,red,player.rect)
+        
+        pygame.display.flip()
+        player.update()
+        player.verify()
+        
+        for event in pygame.event.get():
+            
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+        
+        
+        
+main()

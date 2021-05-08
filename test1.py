@@ -1,41 +1,41 @@
 import socket
 import pickle
 import time
-
-def client():
-    HEADERSIZE = 10
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(("127.0.0.1", 1243))
-    listerecue=[]
-    while True:
-        full_msg=b""
-        new_message=True
-        mesg_complet =False
-        print(listerecue)
+from build import *
+import threading
 
 
-        while not mesg_complet:
-            msg = s.recv(32)
-            if new_message:
-                msglen = int(msg[:HEADERSIZE])
-                print("new msg len:",msglen)
-                new_message = False
-            
-            full_msg+=msg
-            
-            if len(full_msg)-HEADERSIZE == msglen:
-                full_msg = full_msg[HEADERSIZE:]
-                listerecue = pickle.loads(full_msg)
-                mesg_complet = True
-                new_message = True
-                full_msg = b""
-        
-        d = ["a","b","c","d","e","f"]
-        msg = pickle.dumps(d)
-        msg = bytes(f"{len(msg):<{HEADERSIZE}}", 'utf-8')+msg
-        print(msg)
-        s.send(msg)
+"""
+class bullet():
+    def __init__(self,x,y):
+        self.adresse = "IMG/equipe_R/bullet.png"
+        self.imgsize = (20,20)
+        self.x=x
+        self.y=y
+        self.life=3
+        self.thr=threading.Thread(target=self.alive, args=())
+        self.thr.start()
 
-def lol(self):
-    
+    def alive(self):
+        while True:
+            if self.life>0:
+                self.life-=1
+                time.sleep(0.5)
+                print(self.life)
+        print("ok, dead")
+
+f=[]
+for i in range(5):
+    f.append(bullet(50,50))
+print(f)"""
+
+def pri():
+    print("jojooooooooojo")
+
+a = ["a",pri,"e","r","t","y"]
+b=["aa","zz","ee","rr","tt","yy"]
+c=["u","i","o","p"]
+d=[a,b,c]
+print(d[0][0])
+d[0][1]()
 

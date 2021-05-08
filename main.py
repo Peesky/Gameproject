@@ -4,6 +4,7 @@ import os
 from player import *
 import threading
 import pickle
+import build
 
 
 pygame.init()
@@ -27,8 +28,30 @@ def equivalent(builds,sprites):
         compteur+=1
     for i in range(len(sprites)):
         sprites[i].build=builds[i]
-    
+        sprites[i].update()
+"""
+def threadbuilds(liste, arguments):
+    for i in range(len(liste)):
+        for j in range(len(liste.i.threads)):
+            if not liste[i].threads[j][3]:
+                liste[i].threads[j][3]=True
+                liste[i].threads[j][2]=threading.Thread(target=liste.i.threads[j][0], args= liste.i.threads[j][1])
+                liste[i].threads[j][2].start()
+"""
 
+def execute():
+    global player
+    for i in player.builds:
+        
+        if type(i) == build.bullet:
+            print(player.sprites[-1].build.x,player.sprites[-1].build.y)
+            time.sleep(1)
+            if i.run == False:
+                #print(i.x,i.y)
+                
+                i.thread=threading.Thread(target=i.alive())
+                i.thread.start()
+            
 
 
 def draw(sprites):
@@ -49,7 +72,7 @@ def client(clientsocket, ):
             d = pickle.dumps(d)
             d = bytes(f"{len(d):<{HEADERSIZE}}", 'utf-8')+d
             clientsocket.send(d)
-            time.sleep(1)
+            time.sleep(0.3)
     def recevoir():
         while True:            
             full_msg=b""
@@ -106,7 +129,7 @@ def clientext():
             d = pickle.dumps(d)
             d = bytes(f"{len(d):<{HEADERSIZE}}", 'utf-8')+d
             s.send(d)
-            time.sleep(1)
+            time.sleep(0.3)
     def recevoir():
         while True:
             full_msg=b""
@@ -128,7 +151,7 @@ def clientext():
                     mesg_complet = True
                     new_message = True
                     full_msg = b""
-                    
+
                 
                 if len(full_msg)-HEADERSIZE > msglen:
                     full_msg = b""
@@ -139,24 +162,24 @@ def clientext():
     th2= threading.Thread(target=recevoir)
     th2.start()       
         
-
+"""
 def verify():
     global player
     while True:
-        """if m1==c2:
+        if m1==c2:
             print("ok")
         else:
             print("non")
         if m2==c1:
             print("ok2")
         else:
-            print("non")"""
+            print("non")
         time.sleep(3)
         print(player.builds,player.otherbuilds)
 
 thr3= threading.Thread(target=verify)
 thr3.start()
-
+"""
 
 def menu():
     i=input("host?")
@@ -173,20 +196,23 @@ def main():
     menu()
     run = True
 
+
+
     clock = pygame.time.Clock()
     red=(255,0,0)
     blue=(0,0,255)
     while run:
         clock.tick(60)
         win.fill(backC)
-        pygame.draw.rect(win,red,player.rect)
-        pygame.draw.rect(win,blue,player.otherrect)
+        execute()
+        #pygame.draw.rect(win,red,player.rect)
+        #pygame.draw.rect(win,blue,player.otherrect)
 
         equivalent(player.builds, player.sprites)
         equivalent(player.otherbuilds, player.othersprites)
         
 
-
+        
 
         player.update()
         draw(player.sprites)
